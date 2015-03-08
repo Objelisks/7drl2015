@@ -1,7 +1,7 @@
 define(function(require) {
 
-var Pickman = require('./pickman').Pickman;
-var PickmanGroup = require('./pickman').PickmanGroup;
+var Pickman = require('pickman').Pickman;
+var PickmanGroup = require('pickman').PickmanGroup;
 var display = require('display');
 var engine = require('engine');
 var Player = require('player');
@@ -32,6 +32,7 @@ map.tiles['0,1'] = true;
 map.tiles['1,0'] = true;
 map.tiles['2,0'] = true;
 
+engine.add(map, true);
 
 var player = new Player(10, 10);
 
@@ -44,9 +45,14 @@ var p3 = new Pickman(display, 6, 9, Pickman.YELLOW);
 pgroup.add(p1);
 pgroup.add(p2);
 pgroup.add(p3);
-pgroup.add(player);
+pgroup.addLeader(player);
 
-engine.add(map, true);
+for (var i = 0; i < 10; i++) {
+	var p = new Pickman(display, Math.random() * 50, Math.random() * 50, Pickman.RED);
+	pgroup.add(p);
+	engine.add(p, true);
+};
+
 engine.add(p1, true);
 engine.add(p2, true);
 engine.add(p3, true);

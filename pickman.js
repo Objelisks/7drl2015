@@ -13,8 +13,9 @@ define(function(require) {
 	Pickman.BLUE = "#00f";
 	Pickman.YELLOW = "#ff0";
 
-	var groupCohereWeight = 0.3;
-	var groupRepelWeight = 0.4;
+	var groupCohereWeight = 0.8;
+	var groupRepelWeight = 0.6;
+	var maxSpeed = 1.0;
 
 	Pickman.prototype.ai = function() {
 		if(this.group) {
@@ -27,7 +28,7 @@ define(function(require) {
 			var repel = {x: 0, y: 0};
 			var self = this;
 			this.group.members.forEach(function(member) {
-				var weight = 0.1;
+				var weight = 0.3;
 				if(member === self) return;
 				if(self.group.leader === member) {
 					weight = 1.0;
@@ -43,10 +44,8 @@ define(function(require) {
 			});
 			avg.x /= avgTotal;
 			avg.y /= avgTotal;
-			console.log(avg, repel);
 			this.position.x += -(this.position.x - avg.x) * groupCohereWeight + repel.x * groupRepelWeight;
 			this.position.y += -(this.position.y - avg.y) * groupCohereWeight + repel.y * groupRepelWeight;
-			console.log(this.position.x, this.position.y);
 		} else {
 			// idle movement
 			if(Math.random() > 0.95) {
@@ -67,10 +66,6 @@ define(function(require) {
 		this.members = [];
 		this.leader = null;
 	}
-
-	PickmanGroup.prototype.act = function() {
-
-	};
 
 	PickmanGroup.prototype.add = function(member) {
 		this.members.push(member);

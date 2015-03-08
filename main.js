@@ -1,14 +1,15 @@
-var display = new ROT.Display({width:80, height:40, bg:"#304030", fontStyle:"bold"});
-document.body.appendChild(display.getContainer());
+define(function(require) {
 
+var Pickman = require('./pickman').Pickman;
+var PickmanGroup = require('./pickman').PickmanGroup;
+var display = require('display');
+var engine = require('engine');
+var Player = require('player');
 
 var input = document.createElement("input");
 input.focus();
 var keys = {};
 
-
-var scheduler = new ROT.Scheduler.Simple();
-var engine = new ROT.Engine(scheduler);
 
 var map = {
 	tiles: {},
@@ -19,56 +20,37 @@ var map = {
 			var parts = key.split(',');
 			var x = parseInt(parts[0]);
 			var y = parseInt(parts[1]);
-			display.draw(x, y, "#");
+			display.draw(x, y, "░", "#3b3", "#420");
 		});
 	}
 };
+
+//mapjs.loadMap(map, 'testMap.json');
 
 map.tiles['0,0'] = true;
 map.tiles['0,1'] = true;
 map.tiles['1,0'] = true;
 map.tiles['2,0'] = true;
 
-var moveInput = function(obj) {
-	window.addEventListener("keydown", obj);
-};
 
-var player = {
-	x: 5,
-	y: 5,
-	act: function() {
-		display.draw(this.x, this.y, "@");
-		engine.lock();
-		moveInput(this);
-	},
-	handleEvent: function(e) {
-		var code = e.keyCode;
-		switch(code) {
-			case ROT.VK_RIGHT:
-				this.x += 1;
-				break;
-			case ROT.VK_LEFT:
-				this.x -= 1;
-				break;
-			case ROT.VK_UP:
-				this.y -= 1;
-				break;
-			case ROT.VK_DOWN:
-				this.y += 1;
-				break;
-			default:
-				return;
-		}
-		this.clearInput();
-	},
-	clearInput: function() {
-		window.removeEventListener("keydown", this);
-		engine.unlock();
-	}
-};
+var player = new Player(10, 10);
 
-scheduler.add(player, true);
-scheduler.add(map, true);
+
+var pgroup = new PickmanGroup();
+var p1 = new Pickman(display, 5, 5, Pickman.RED);
+var p2 = new Pickman(display, 6, 6, Pickman.BLUE);
+var p3 = new Pickman(display, 6, 9, Pickman.YELLOW);
+
+pgroup.add(p1);
+pgroup.add(p2);
+pgroup.add(p3);
+pgroup.add(player);
+
+engine.add(map, true);
+engine.add(p1, true);
+engine.add(p2, true);
+engine.add(p3, true);
+engine.add(player, true);
 
 engine.start();
 
@@ -85,3 +67,5 @@ engine.start();
 // multitile characters
 // particle effects
 // swarming
+
+});

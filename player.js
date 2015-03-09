@@ -6,6 +6,8 @@ define(function(require) {
 
 
 	var keyMapping = {};
+
+	// arrow keys / numpad / vi: movement
 	keyMapping[ROT.VK_RIGHT] = actions.move(1, 0),
 	keyMapping[ROT.VK_NUMPAD6] = actions.move(1, 0);
 	keyMapping[ROT.VK_LEFT] = actions.move(-1, 0);
@@ -18,6 +20,15 @@ define(function(require) {
 	keyMapping[ROT.VK_NUMPAD9] = actions.move(1, -1);
 	keyMapping[ROT.VK_NUMPAD1] = actions.move(-1, 1);
 	keyMapping[ROT.VK_NUMPAD3] = actions.move(1, 1);
+
+	// space: wait
+	keyMapping[ROT.VK_SPACE] = actions.wait();
+
+	// i: switch active color
+
+	// o: throw
+
+	// p: pluck
 
 
 	var Player = function(x, y) {

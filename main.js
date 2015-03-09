@@ -5,6 +5,7 @@ var PickmanGroup = require('pickman').PickmanGroup;
 var display = require('display');
 var engine = require('engine');
 var Player = require('player');
+var mapGen = require('map');
 
 var input = document.createElement("input");
 input.focus();
@@ -13,6 +14,7 @@ var keys = {};
 
 var map = {
 	tiles: {},
+	dijkstra: {},
 	act: function() {
 		console.log("frame");
 		display.clear();
@@ -27,10 +29,7 @@ var map = {
 
 //mapjs.loadMap(map, 'testMap.json');
 
-map.tiles['0,0'] = true;
-map.tiles['0,1'] = true;
-map.tiles['1,0'] = true;
-map.tiles['2,0'] = true;
+map.tiles = mapGen.generate();
 
 engine.add(map, true);
 
@@ -38,9 +37,9 @@ var player = new Player(10, 10);
 
 
 var pgroup = new PickmanGroup();
-var p1 = new Pickman(display, 5, 5, Pickman.RED);
-var p2 = new Pickman(display, 6, 6, Pickman.BLUE);
-var p3 = new Pickman(display, 6, 9, Pickman.YELLOW);
+var p1 = new Pickman(map, 5, 5, Pickman.RED);
+var p2 = new Pickman(map, 6, 6, Pickman.BLUE);
+var p3 = new Pickman(map, 6, 9, Pickman.YELLOW);
 
 pgroup.add(p1);
 pgroup.add(p2);
@@ -48,7 +47,7 @@ pgroup.add(p3);
 pgroup.addLeader(player);
 
 for (var i = 0; i < 10; i++) {
-	var p = new Pickman(display, Math.random() * 50, Math.random() * 50, Pickman.RED);
+	var p = new Pickman(map, Math.random() * 10, Math.random() * 10, Pickman.RED);
 	pgroup.add(p);
 	engine.add(p, true);
 };
